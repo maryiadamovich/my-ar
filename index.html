@@ -1,24 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR.js Example</title>
-    <!-- Подключаем AR.js и библиотеку Three.js -->
+    <title>AR.js</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
+    <script>
+        window.addEventListener('load', function () {
+            const canvas = document.querySelector('canvas');
+            if (canvas) {
+                const context = canvas.getContext('2d', { willReadFrequently: true });
+            }
+
+            let videoStarted = false;
+            const startVideo = () => {
+                if (!videoStarted) {
+                    const video = document.querySelector('a-video');
+                    if (video) {
+                        video.setAttribute('play', 'true');
+                        videoStarted = true;
+                        console.log('Video started after user interaction');
+                    }
+                }
+            };
+
+            document.addEventListener('click', startVideo);
+            document.addEventListener('touchstart', startVideo);
+            document.addEventListener('keydown', startVideo);
+        });
+    </script>
 </head>
+
 <body style="margin: 0; overflow: hidden;">
-    <!-- Камера для отображения AR-сцен -->
     <a-scene embedded arjs>
-        <!-- Модель 3D на маркере -->
-        <a-marker type="pattern" url="./public/pattern-qr-code.patt">
-            <a-entity 
-                geometry="primitive: box; width: 1; height: 1; depth: 1;" 
-                material="color: red;">
-            </a-entity>
+        <a-marker type="pattern" url="./public/pattern-qr-code.patt" width="0.08" height="0.08">
+            <a-video width="1.77675" height="0.9991" position="0 0 0" rotation="-90 0 0" src="./public/video3.mp4"
+                play="false" loop="true" muted="false">
+            </a-video>
         </a-marker>
         <a-entity camera></a-entity>
     </a-scene>
 </body>
+
 </html>
