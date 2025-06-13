@@ -7,6 +7,18 @@
     <title>AR.js</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
+</head>
+
+<body style="margin: 0; overflow: hidden;">
+    <a-scene embedded arjs>
+        <a-marker type="pattern" url="./public/pattern-qr-code.patt" width="0.08" height="0.08">
+            <a-video width="1.77675" height="0.9991" position="0 0 0" rotation="-90 0 0" src="./public/video3.mp4"
+                play="false" loop="false" muted="false">
+            </a-video>
+        </a-marker>
+        <a-entity camera></a-entity>
+    </a-scene>
+
     <script>
         window.addEventListener('load', function () {
             const canvas = document.querySelector('canvas');
@@ -26,22 +38,37 @@
                 }
             };
 
+            const toggleVideo = () => {
+                const video = document.querySelector('a-video');
+                if (video) {
+                    if (video.getAttribute('play')) {
+                        video.setAttribute('play', 'false');
+                        console.log('Video paused');
+                    } else {
+                        video.setAttribute('play', 'true');
+                        console.log('Video resumed');
+                    }
+                }
+            };
+
+            document.addEventListener('keydown', function(event) {
+                if (event.code === 'Space') {
+                    toggleVideo();
+                }
+            });
+
+            document.addEventListener('touchstart', function(event) {
+                if (videoStarted) {
+                    toggleVideo();
+                } else {
+                    startVideo();
+                }
+            });
+
             document.addEventListener('click', startVideo);
-            document.addEventListener('touchstart', startVideo);
             document.addEventListener('keydown', startVideo);
         });
     </script>
-</head>
-
-<body style="margin: 0; overflow: hidden;">
-    <a-scene embedded arjs>
-        <a-marker type="pattern" url="./public/pattern-qr-code.patt" width="0.08" height="0.08">
-            <a-video width="1.77675" height="0.9991" position="0 0 0" rotation="-90 0 0" src="./public/video3.mp4"
-                play="false" loop="true" muted="false">
-            </a-video>
-        </a-marker>
-        <a-entity camera></a-entity>
-    </a-scene>
 </body>
 
 </html>
